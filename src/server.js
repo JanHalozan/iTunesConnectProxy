@@ -33,14 +33,12 @@ app.all('*', function(req, res, next) {
 });
 
 app.get('/total-downloads', function(req, res) {
-   itunes.request(Report.ranked().time(1, 'days'), function(error, result) {
+   itunes.request(Report('timed').time(1, 'days').interval('day'), function(error, result) {
       if (error != null) {
          return res.status(500).send({ error: 'Something blew up.' });
       }
 
-      var data = {
-          value: result[0].units
-      };
+      var data = result[0].data[0];
       res.send(JSON.stringify(data));
    });
 });
