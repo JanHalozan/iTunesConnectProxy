@@ -1,15 +1,18 @@
 {
-   "name": "iTunesConnectProxy",
-   "private": true,
-   "version": "0.1.0",
-   "description": "Proxy for apple iTunesConnect plaform using basic auth.",
-   "main": "src/server.js",
-   "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-   },
-   "author": "Jan Haložan",
-   "license": "ISC",
-   "dependencies": {
-      "itunesconnect": "0.2.0"
-   }
+  "name": "iTunesConnectProxy",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Proxy for apple iTunesConnect plaform using basic auth.",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jan Haložan",
+  "license": "ISC",
+  "dependencies": {
+    "basic-auth": "^1.0.3",
+    "dateformat": "1.0.12",
+    "express": "4.13.3",
+    "itunesconnect": "0.2.0"
+  }
 }

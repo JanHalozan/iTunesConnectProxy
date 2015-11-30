@@ -1,50 +1,48 @@
-var Databox = require('databox');
+var express = require('express');
 var itc = require("itunesconnect");
-var dateFormat = require('dateformat');
+var auth = require('basic-auth');
 
-var client = new Databox({
-    push_token: '26rpbwew6w4k0040g8k8koww8040coww'
-});
-
+var app = express();
+var itunes = null;
 var Report = itc.Report;
-var itunes = new itc.Connect('apps@zepppelin.com', 'Ze3pelin');
 
-var date = new Date();
-date.setDate(date.getDate() - 1); // We're always pushing for yesterday
+// Auth
+app.all('*', function(req, res, next) {
+   var user = auth(req);
 
-var datetime = dateFormat(date, "yyyy-mm-dd hh:MM:ss");
-
-itunes.request(Report.ranked().time(1, 'days'), function(error, result) {
-   if (error != null) {
-      // TODO: Write error message somewhere
-      return;
+   if (!user) {
+      res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+      return res.sendStatus(401);
    }
 
-   client.push({
-       key: 'totalDownloads',
-       value: result[0].units,
-       date: datetime
+   var options = {
+      errorCallback: function(err) {
+         res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+         return res.send("repa");
+      },
+      loginCallback: function(resp) {
+         console.log('Dela');
+      }
+   }
+
+   if (itunes == null) {
+      itunes = new itc.Connect(user.name, user.pass, options);
+   }
+
+   next();
+});
+
+app.get('/total-downloads', function(req, res) {
+   itunes.request(Report.ranked().time(1, 'days'), function(error, result) {
+      if (error != null) {
+         return res.status(500).send({ error: 'Something blew up.' });
+      }
+
+      var data = {
+          value: result[0].units
+      };
+      res.send(JSON.stringify(data));
    });
 });
 
-itunes.request(Report.ranked().time(1, 'days').group('location'), function(error, result) {
-   if (error != null) {
-      // TODO: Write error message somewhere
-      return;
-   }
-
-   var kpis = [];
-
-   for (var i = 0; i < result.length; ++i) {
-      kpis.push({
-         key: 'downloads',
-         value: result[i].units,
-         attributes: {
-            country: result[i].title
-         },
-         date: datetime
-      });
-   }
-
-   client.insertAll(kpis);
-});
+app.listen(3001);
