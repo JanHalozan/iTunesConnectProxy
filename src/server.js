@@ -18,10 +18,9 @@ app.all('*', function(req, res, next) {
    var options = {
       errorCallback: function(err) {
          res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-         return res.send("repa");
+         return res.sendStatus(401);
       },
       loginCallback: function(resp) {
-         console.log('Dela');
       }
    }
 
