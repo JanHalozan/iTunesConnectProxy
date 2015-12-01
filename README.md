@@ -4,7 +4,7 @@ A proxy providing basic auth &amp; REST interface for [iTunesConnect portal](htt
 
 # Usage
 
-`GET /total-downloads` - Returns number of units downloaded grouped by application for the last day.
+`GET /total-downloads` - Returns number of units downloaded grouped by application for the last day.  
 `GET /total-downloads/{interval}` - Returns number of units downloaded grouped by application for last `{interval}` days.
 
 # Development
