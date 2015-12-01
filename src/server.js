@@ -3,7 +3,6 @@ var itc = require("itunesconnect");
 var auth = require('basic-auth');
 
 var app = express();
-var itunes = null;
 var Report = itc.Report;
 
 // Auth
@@ -24,15 +23,14 @@ app.all('*', function(req, res, next) {
       }
    }
 
-   if (itunes == null) {
-      itunes = new itc.Connect(user.name, user.pass, options);
-   }
+   var itunes = new itc.Connect(user.name, user.pass, options);
+   req.itunes = itunes;
 
    next();
 });
 
 app.get('/total-downloads', function(req, res) {
-   itunes.request(Report('timed').time(1, 'days').interval('day'), function(error, result) {
+   req.itunes.request(Report('timed').time(1, 'days').interval('day'), function(error, result) {
       if (error != null) {
          return res.status(500).send({ error: 'Something blew up.' });
       }
