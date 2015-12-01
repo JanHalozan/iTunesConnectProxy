@@ -36,7 +36,7 @@ app.get('/total-downloads', function (req, res) {
         }
 
         var data = result[0].data[0];
-        res.send(JSON.stringify(data));
+        res.send(data);
     });
 });
 
