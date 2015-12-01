@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "server",
+      "script": "src/server.js",
+      "instances": 1,
+      "merge_logs": true,
+      "autorestart": true,
+      "exec_mode": "fork",
+      "cwd": "/usr/src/app"
+    }
+  ]
+}

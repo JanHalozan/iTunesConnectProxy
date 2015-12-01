@@ -5,7 +5,9 @@
   "description": "Proxy for apple iTunesConnect plaform using basic auth.",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "npm install",
+    "start": "pm2 start /usr/src/app/processes.json --no-daemon --mini-list --no-color",
+    "test": "echo \"no tests\""
   },
   "author": "Jan Haložan",
   "license": "ISC",
