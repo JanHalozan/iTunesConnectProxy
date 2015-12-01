@@ -2,32 +2,12 @@
 
 var express = require('express'),
     itc = require("itunesconnect"),
-    auth = require('basic-auth');
+    auth = require('./auth.js');
 
 var app = express();
 var Report = itc.Report;
 
-// Auth
-app.all('*', function (req, res, next) {
-    var user = auth(req);
-
-    if (!user) {
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        return res.sendStatus(401);
-    }
-
-    var options = {
-        errorCallback: function (err) {
-            res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-            return res.sendStatus(401);
-        },
-        loginCallback: function (resp) {
-        }
-    };
-
-    req.itunes = new itc.Connect(user.name, user.pass, options);
-    next();
-});
+app.use(auth.handler);
 
 app.get('/total-downloads', function (req, res) {
     req.itunes.request(Report('timed').time(1, 'days').interval('day'), function (error, result) {
