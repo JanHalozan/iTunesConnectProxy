@@ -2,7 +2,7 @@
   "name": "iTunesConnectProxy",
   "private": true,
   "version": "0.1.0",
-  "description": "Proxy for apple iTunesConnect plaform using basic auth.",
+  "description": "REST Proxy for apple iTunesConnect platform using basic auth.",
   "main": "src/server.js",
   "scripts": {
     "prestart": "npm install",
