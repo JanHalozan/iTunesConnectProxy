@@ -9,14 +9,18 @@ var Report = itc.Report;
 
 app.use(auth.handler);
 
-app.get('/total-downloads', function (req, res) {
-    req.itunes.request(Report('timed').time(1, 'days').interval('day'), function (error, result) {
+app.get('/total-downloads/:interval?', function (req, res) {
+    var interval = parseInt(req.params.interval, 10);
+    if (isNaN(interval)) {
+        interval = 1;
+    }
+
+    req.itunes.request(Report('ranked').time(interval, 'days'), function (error, result) {
         if (error !== null) {
             return res.status(500).send({error: 'Something blew up.'});
         }
 
-        var data = result[0].data[0];
-        res.send(data);
+        res.send(result);
     });
 });
 
